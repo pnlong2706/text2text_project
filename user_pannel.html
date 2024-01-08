@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Text2Text</title>
+    <style>
+
+      * {
+        margin: 0;
+        padding: 0;
+        border: none;
+        font-family: tahoma;
+    }
+
+      body {
+        background-color: #b96007;
+      }
+
+      #left_bar {
+        background-color: #582c00;
+        color: white;
+        height: 80vh;
+        width: 80vh;
+        border-radius: 0px 0px 75vh 0px;
+        margin: 0px 0px 0px 0px;
+        padding-top: 5vh;
+        padding-left: 5vh;
+        box-sizing: border-box;
+      }
+
+      #left_bar h1 {
+        font-size: 15vh;
+      }
+
+      #left_bar p {
+        font-size: 20px;
+        padding-left: 10px;
+        margin-bottom: 20px;
+      }
+
+      #left_bar input {
+        margin-left: 10px;
+        height: fit-content;
+        padding: 8px 8px 8px 8px;
+        font-size: 20px;
+        border-radius: 6px;
+        width: 36%;
+      }
+
+      #left_bar button {
+        margin-left: 10px;
+        height: fit-content;
+        padding: 8px 8px 8px 8px;
+        font-size: 20px;
+        border-radius: 6px;
+      }
+
+      #left_bar button:hover {
+        background-color: antiquewhite;
+        cursor: pointer;
+      }
+
+      @media all and (max-width: 1200px) {
+        #left_bar {
+          background-color: #582c00;
+          color: white;
+          height: 80vh;
+          width: 80vh;
+          border-radius: 0px 0px 100vh 0px;
+          margin: 0px 0px 0px 0px;
+          padding-top: 5vh;
+          padding-left: 5vh;
+          box-sizing: border-box;
+        }
+
+        #left_bar p {
+          font-size: 45px;
+        }
+
+        #left_bar h1 {
+          margin-top: 15vh;
+        }
+        
+        #left_bar input {
+          font-size: 40px;
+          padding: 16px 16px 16px 16px;
+        }
+
+        #left_bar button {
+          font-size: 40px;
+          padding: 16px 16px 16px 16px;
+        }
+      }
+
+    </style>
+  </head>
+  <script>
+    function go_box_chat() {
+        //alert(user_id);
+        let to_id = document.getElementById("to_id").value;
+        document.getElementById("to_id").value = "";
+        if( to_id == user_id ) {
+            alert("Your id and your friend's id is the same!");
+        }
+        else {
+            const xhr = new XMLHttpRequest();
+            xhr.open("POST", "/go_box_chat", true);
+            xhr.onload = function() {
+                res = xhr.responseText;
+                if(res!="-1") {
+                    location.replace("http://localhost:3000/boxchat?idfrom="+ user_id + "?idto=" + to_id + "?hp=" + res);
+                }
+                else {
+                    alert("Username doesn't exist!");
+                }
+            };
+            xhr.send( user_id + "." + to_id );
+        }
+    }
+
+    function enter_go_box(event) {
+        if(event.key == "Enter") go_box_chat();
+    }
+
+  </script>
+  <body id = "main_body">
+    <div id = "left_bar" >
+      <h1> HELLO </h1>
+      <p> Enter user id you wanna chat with: ( admin: 000001 ) : </p>
+      <input type = "text" id = "to_id" onkeydown="enter_go_box(event)">
+      <button type="button" onclick="go_box_chat()">Submit</button>
+    </div>
+
+  </body>
+</html>

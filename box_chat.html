@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html>
+    <head>
+    <meta charset="UTF-8">
+    <title>Hello World</title>
+
+    <style>
+
+        #box_chat::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        #box_chat::-webkit-scrollbar-track {
+            display: none;
+        }
+
+        #box_chat::-webkit-scrollbar-thumb {
+            background: #aa9060;
+            border-radius: 7px;
+            width: 14px;
+            border-color: bisque;
+            border-width: 3px;
+        }
+
+        #box_chat::-webkit-scrollbar-thumb:hover {
+            background: #9b7c43;
+        }
+      
+        body {
+            background-color: #994d00;
+            width: 98vw;
+        }
+      
+        #text_box button:hover {
+            background-color: #bd7833;
+            color: white;
+            border-width: 2px;
+            border-color: antiquewhite;
+            cursor: pointer;
+        }
+      
+        #main_chat {
+            height: 80vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+      
+        #box_chat p b {
+            font-weight: bolder;
+            color: rgb(155, 7, 7);
+        }
+      
+      @media all and (max-width: 1200px) {
+        
+
+        #box_chat {
+            width: max(80%,400px);
+            height: 75vh;
+            margin-top: 5vh; 
+            background-color: rgb(240, 193, 136);
+            border-radius: 10px;
+            padding: 10px 10px 10px 10px;
+            padding-left: 40px;
+            margin-bottom: 20px;
+            box-sizing: border-box;
+            overflow-y: scroll;
+
+        }
+
+        #box_chat p {
+            font-size: 32px;
+            border-radius: 10px;
+            background-color: rgb(250, 223, 191);
+            width: max(90%, 300px) ;
+            padding: 10px 10px 10px 10px;
+            height: fit-content;
+        }
+
+        #text_box {
+            font-size: 32px;
+            display: flex;
+            justify-content: center;
+            height: fit-content;
+            width:  max(70%,400px);
+        }
+
+        #mess_input {
+            font-size: 32px;
+            background-color: rgb(250, 223, 191);
+            width: max(80%, 260px);
+            height: fit-content;
+            padding: 8px 8px 8px 8px;
+            padding-bottom: 16px;
+            padding-top: 16px;
+            margin-right: 10px;
+            border-radius: 8px;
+            border-width: 0px;
+            font-family: 'Times New Roman', Times, serif;
+        }
+
+        #text_box button {
+            font-size: 32px;
+            border-radius: 8px;
+            border-width: 0px;
+            background-color: rgb(240, 193, 136);
+            font-weight: bold;
+            padding-bottom: 16px;
+            padding-top: 16px;
+            font-family: 'Times New Roman', Times, serif;
+            width: 100px;
+
+        }
+
+      }
+        
+      @media all and (min-width: 1200px) {
+
+        #box_chat {
+            width: max(60%,400px);
+            height: 60vh;
+            background-color: rgb(240, 193, 136);
+            border-radius: 10px;
+            padding: 10px 10px 10px 10px;
+            padding-left: 40px;
+            margin-bottom: 20px;
+            box-sizing: border-box;
+            overflow-y: scroll;
+        }
+
+        #box_chat p {
+            border-radius: 10px;
+            background-color: rgb(250, 223, 191);
+            width: max(90%, 300px) ;
+            padding: 10px 10px 10px 10px;
+            height: fit-content;
+        }
+
+        #text_box {
+            display: flex;
+            justify-content: center;
+            height: fit-content;
+            width:  max(70%,400px);
+        }
+
+        #mess_input {
+            background-color: rgb(250, 223, 191);
+            width: max(70%, 260px);
+            height: fit-content;
+            padding: 8px 8px 8px 8px;
+            margin-right: 10px;
+            font-size: 16px;
+            border-radius: 8px;
+            border-width: 0px;
+            font-family: 'Times New Roman', Times, serif;
+            overflow-y: scroll;
+            overflow-x: auto;
+        }
+
+        #text_box button {
+            border-radius: 8px;
+            border-width: 0px;
+            background-color: rgb(240, 193, 136);
+            font-weight: bold;
+            font-size: 16px;
+            font-family: 'Times New Roman', Times, serif;
+            width: 100px;
+        }
+
+      }
+
+    </style>
+    </head>
+
+    <script>
+
+    var id_from;
+    var id_to;
+    var id_mess;
+    var autoupdate;
+
+    function merge() {
+        s = id_from.slice(4);
+        t = id_to.slice(4);
+        
+        if( s > t ) { let tmp = s; s = t; t = tmp; }
+        //alert(s +  t);
+
+        let ans = s + t;
+        return ans;
+    }
+
+    function loadmess() {
+        //alert(id_mess);
+        const xhr = new XMLHttpRequest();
+        xhr.open("POST", "/loading", true);
+        xhr.onload = function() {
+            document.getElementById("box_chat").innerHTML += xhr.responseText;
+            autoupdate = setInterval(update, 500);
+            var objDiv = document.getElementById("box_chat");
+            objDiv.scrollTop = objDiv.scrollHeight;
+        };
+        xhr.send("load=" + id_mess);
+    }
+
+    function update() {
+        const xhr = new XMLHttpRequest();
+        xhr.open("POST", "/update", true);
+        xhr.onload = function() {
+            if(xhr.responseText != "-1") { 
+                document.getElementById("box_chat").innerHTML += xhr.responseText;
+                var objDiv = document.getElementById("box_chat");
+                objDiv.scrollTop = objDiv.scrollHeight;
+            }
+        };
+        let mess_id = document.getElementById("box_chat").lastElementChild.id;
+        xhr.send("update=" + mess_id.slice(4) + "=" + id_mess );
+    }
+
+    function enter_send(event) {
+        if(event.key == "Enter") sendRequest();
+    }
+
+    function sendRequest() {
+        clearInterval(autoupdate);
+        const mess_text = " <b> [" + id_from + "] </b>" + document.getElementById("mess_input").value;
+        if(document.getElementById("mess_input").value == "") return;
+        document.getElementById("mess_input").value = "";
+        const xhr = new XMLHttpRequest();
+        xhr.open("POST", "/sendmess", true);
+        xhr.onload = function() {
+            document.getElementById("box_chat").innerHTML += xhr.responseText;
+            autoupdate = setInterval(update, 500);
+            var objDiv = document.getElementById("box_chat");
+            objDiv.scrollTop = objDiv.scrollHeight;
+        };
+
+        xhr.send( '{' + '"mess_text":' + '"' + mess_text + '", "id_prev":' + 
+        '"' + document.getElementById("box_chat").lastElementChild.id +
+         '", "id_mess":' + '"' + id_mess + '" }');
+    }
+
+    
+    </script>
+    <body>
+        <div id = "main_chat" > 
+            <div id="box_chat"> <p id="mess0"> </p> </div>
+            <div id="text_box"> 
+                <input type="text" placeholder="Enter message" id="mess_input" name="name" onkeydown="enter_send(event)">
+                <button type="button" onclick="sendRequest()"> Send </button> 
+            </div>
+        </div>
+
+        <div id="footer"> </div>
+        <script>   </script>
+    </body>
+</html>

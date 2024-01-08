@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Text2Text</title>
+
+    <style>
+
+      body {
+        background-image: linear-gradient(to bottom right, #7a2300, rgb(255, 222, 34));
+        height: 98vh;
+        display: flex;
+        justify-content: center;
+      }
+
+      #container {
+        margin-top: 10vh;
+        background-color: antiquewhite;
+        width: 30%;
+        height: 80vh;
+        border-radius: 40px;
+        padding: 30px 30px 30px 30px;
+        box-sizing: border-box;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+      }
+
+      #container input {
+        width: 85%;
+        line-height: 28px;
+        font-size: 20px;
+        padding: 16px 16px 16px 16px;
+        border-radius: 4px;
+        margin-bottom: 20px;
+        border-width: 0px;
+        background-color: rgb(228, 214, 197);
+        box-sizing: border-box;
+      }
+
+      #container button {
+        width: 85%;
+        line-height: 28px;
+        font-size: 20px;
+        padding: 16px 16px 16px 16px;
+        border-radius: 4px;
+        margin-bottom: 20px;
+        border-width: 0px;
+        background-color: #d39b46;
+        color: white;
+        transition: background-color 0.2s, color 0.2s;
+      }
+
+      #container button:hover {
+        background-color: rgb(245, 213, 174);
+        color: #c0790f;
+        transition: background-color 0.2s, color 0.2s;
+        cursor: pointer;
+      }
+
+      #instruc {
+        font-size: 20px;
+        font-family: Arial, Helvetica, sans-serif;
+        font-weight: bold;
+      }
+
+      #name_ {
+        padding: 0px 0px 0px 0px;
+        margin: 0px 0px 0px 0px;
+        color: #c0790f;
+        font-size: 10vw;
+        font-family: Georgia;
+        font-weight: bold;
+      }
+
+      @media all and (max-width: 1200px) {
+        #container {
+          height: 70vh;
+          width: 80%;
+        }
+
+        #name_ {
+          font-size: 10vh;
+        }
+
+        #instruc {
+          font-size: 40px;
+        }
+
+        #container input {
+          font-size: 40px;
+          line-height: 50px;
+        }
+
+        #container button {
+          font-size: 40px;
+          line-height: 50px;
+        }
+      }
+
+      
+
+    </style>
+
+  </head>
+  <script>
+    let key = "";
+
+    function enter_send_valid(event) {
+      if(event.key == "Enter") send_valid();
+    }
+
+    function send_valid() {
+
+      let Id = document.getElementById("user_id").value;
+      let password = document.getElementById("user_password").value;
+
+      document.getElementById("user_id").value = "";
+      document.getElementById("user_password").value = "";
+
+      const xhr = new XMLHttpRequest();
+      xhr.open("POST", "/checkvalid", true);
+      xhr.onload = function() {
+        let res = xhr.responseText;
+        if( res != "-1") {
+          location.replace("http://localhost:3000/navigation?id=" + Id + "?" + res);
+        }
+        else {
+          alert("WRONG USER ID OR PASSWORD!");
+        }
+      };
+
+      xhr.send( Id + "=" + password );
+    }
+    
+  </script>
+
+  <body id = "main_body">
+    <div id = "container" >
+      <p id = "name_"> T2T </p>
+      <p id = "instruc" > LOGIN </p> 
+      <input type="text" placeholder="Enter user id" id="user_id" name="name"> 
+      <input type="password" placeholder="Password" id="user_password" name="name" onkeydown="enter_send_valid(event)">
+      <button type="button" onclick="send_valid()"> LOGIN </button>
+    </div>
+
+    <div id="footer"> </div>
+
+  </body>
+</html>
