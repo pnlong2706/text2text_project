@@ -4,4 +4,4 @@ Basic messaging website that allows sending messages to other users, real-time c
 The website is deployed on a free-hosting server: https://satin-nebula-archaeology.glitch.me/
 Creating a new account is not available yet, a sample account in use is: { ID: 000005; pass: pe123456; }
 
-There are still bugs with sending messages too quickly though :<
+There are still bugs with sending messages too quickly though :<, and the server is restricting the number of requests on project.
