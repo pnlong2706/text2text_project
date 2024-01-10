@@ -223,9 +223,10 @@
     }
 
     function sendRequest() {
-        clearInterval(autoupdate);
-        const mess_text = " <b> [" + id_from + "] </b>" + document.getElementById("mess_input").value;
         if(document.getElementById("mess_input").value == "") return;
+        ss = checkstring(document.getElementById("mess_input").value);
+        clearInterval(autoupdate);
+        const mess_text = " <b> [" + id_from + "] </b>" + ss;
         document.getElementById("mess_input").value = "";
         const xhr = new XMLHttpRequest();
         xhr.open("POST", "/sendmess", true);
@@ -239,6 +240,16 @@
         xhr.send( '{' + '"mess_text":' + '"' + mess_text + '", "id_prev":' + 
         '"' + document.getElementById("box_chat").lastElementChild.id +
          '", "id_mess":' + '"' + id_mess + '" }');
+    }
+
+    function checkstring(s) {
+        let j = -2;
+        while(true) {
+            j = s.indexOf('"',j+2);
+            if(j==-1) break;
+            s = s.slice(0,j) + "\\" + s.slice(j);
+        }
+        return s;
     }
 
     
