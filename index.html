@@ -124,7 +124,7 @@
       xhr.onload = function() {
         let res = xhr.responseText;
         if( res != "-1") {
-          location.replace("http://localhost:3000/navigation?id=" + Id + "?" + res);
+          location.assign("http://localhost:3000/navigation?id=" + Id + "?" + res);
         }
         else {
           alert("WRONG USER ID OR PASSWORD!");
