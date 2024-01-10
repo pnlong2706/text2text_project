@@ -108,7 +108,7 @@
             xhr.onload = function() {
                 res = xhr.responseText;
                 if(res!="-1") {
-                    location.replace("http://localhost:3000/boxchat?idfrom="+ user_id + "?idto=" + to_id + "?hp=" + res);
+                    location.assign("http://localhost:3000/boxchat?idfrom="+ user_id + "?idto=" + to_id + "?hp=" + res);
                 }
                 else {
                     alert("Username doesn't exist!");
